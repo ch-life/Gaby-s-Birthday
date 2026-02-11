@@ -23,9 +23,9 @@ body {
 #screen {
     text-align: center;
     font-size: 40px;
-    max-width: 800px;
+    max-width: 900px;
     padding: 40px;
-    z-index: 2;
+    white-space: pre-line;
 }
 
 input {
@@ -37,6 +37,36 @@ input {
     font-size: 36px;
     text-align: center;
     outline: none;
+}
+
+#confirmBtn {
+    margin-top: 40px;
+    padding: 15px 40px;
+    font-size: 30px;
+    font-family: 'Bungee Spice', cursive;
+    background: transparent;
+    border: 3px solid #00f7ff;
+    color: #00f7ff;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+#confirmBtn:hover {
+    background: #00f7ff;
+    color: black;
+}
+
+.pop {
+    transform: scale(1.2);
+}
+
+.flashText {
+    animation: flash 0.1s infinite alternate;
+}
+
+@keyframes flash {
+    from { opacity: 1; }
+    to { opacity: 0.2; }
 }
 
 .shake {
@@ -51,13 +81,17 @@ input {
     100% { transform: translate(0,0); }
 }
 
-.flash {
-    animation: flash 0.1s infinite alternate;
-}
-
-@keyframes flash {
-    from { opacity: 1; }
-    to { opacity: 0.2; }
+#flashOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    transition: opacity 0.3s ease;
 }
 
 canvas#confetti {
@@ -66,12 +100,39 @@ canvas#confetti {
     left: 0;
     pointer-events: none;
 }
+
+.choiceBtn {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    font-size: 28px;
+    font-family: 'Bungee Spice', cursive;
+    background: transparent;
+    border: 2px solid #00f7ff;
+    color: #00f7ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 80%;
+    max-width: 600px;
+}
+
+.choiceBtn:hover {
+    background: #00f7ff;
+    color: black;
+    transform: scale(1.05);
+}
+
 </style>
 </head>
 <body>
 
+<div id="flashOverlay"></div>
 <canvas id="confetti"></canvas>
 <div id="screen"></div>
+
+<audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_ecba0c58a1.mp3?filename=music_unlimited-stranger-things-124008.mp3" type="audio/mpeg">
+</audio>
 
 <audio id="typeSound">
     <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_2c1b0f6e38.mp3?filename=keyboard-typing-108923.mp3" type="audio/mpeg">
@@ -79,14 +140,15 @@ canvas#confetti {
 
 <script>
 const screen = document.getElementById("screen");
+const flash = document.getElementById("flashOverlay");
+const music = document.getElementById("bgMusic");
 const typeSound = document.getElementById("typeSound");
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function typeLine(text, speed = 80, hold = 2000) { 
-    // slower typing
+async function typeLine(text, speed = 90, hold = 2000) {
     screen.innerHTML = "";
     for (let char of text) {
         screen.innerHTML += char;
@@ -116,42 +178,93 @@ function getInput(promptText) {
     });
 }
 
-async function start() {
+/* -------- TRANSMISSION INTRO -------- */
+
+async function initTransmission() {
+    await typeLine("Receiving transmission...", 100, 1500);
+    await typeLine("Do you accept this transmission?", 100, 1500);
+
+    const button = document.createElement("button");
+    button.id = "confirmBtn";
+    button.innerText = "CONFIRM";
+    screen.appendChild(button);
+
+    button.addEventListener("click", async () => {
+        button.classList.add("pop");
+
+        flash.style.opacity = "1";
+        await sleep(200);
+        flash.style.opacity = "0";
+        await sleep(300);
+
+        screen.innerHTML = "";
+
+        music.volume = 0.6;
+        music.play();
+
+        startAdventure();
+    });
+}
+
+/* -------- CHOICE -------- */
+    
+function getChoice() {
+    return new Promise(resolve => {
+        screen.innerHTML = "Choose your destiny:";
+
+        const options = [
+            { text: "Seek Chaos & Adventure", value: "1" },
+            { text: "Claim Wealth & Glory", value: "2" },
+            { text: "Unlock Inner Cosmic Power", value: "3" }
+        ];
+
+        options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.className = "choiceBtn";
+            btn.innerText = option.text;
+
+            btn.addEventListener("click", () => {
+                screen.innerHTML = "";
+                resolve(option.value);
+            });
+
+            screen.appendChild(btn);
+        });
+    });
+}
+
+/* -------- MAIN ADVENTURE -------- */
+
+async function startAdventure() {
+
     await typeLine("Initializing Cosmic Intelligence...");
     await typeLine("Scanning quantum signature...");
     await typeLine("Identity confirmed.");
-    await typeLine("Gaby");
+    await typeLine("Gaby.");
     await typeLine("Upgrade detected.");
-    await typeLine("Upgrade type: birthday");
-    await typeLine("Birthday version: 22");
-    await typeLine("Estimated delivery: 3 days.");
+    await typeLine("Birthday version: 22.");
 
     screen.innerHTML = "SYSTEM OVERRIDE";
-    screen.classList.add("flash");
+    screen.classList.add("flashText");
     await sleep(2000);
-    screen.classList.remove("flash");
+    screen.classList.remove("flashText");
     screen.innerHTML = "";
-
-    await typeLine("SECRET UPDATE", 50, 3000);
 
     await typeLine("Analyzing destiny matrix...");
     await typeLine("Probability streams merging...");
+
     screen.innerHTML = "The Universe trembles...";
     screen.classList.add("shake");
     await sleep(3000);
     screen.classList.remove("shake");
     screen.innerHTML = "";
 
-    await typeLine("Your birthday has been upgraded to ...");
-    await typeLine("Ultra mega awesome dopeness");
-    await typeLine("You determine your destiny");
+    await typeLine("Your birthday has been upgraded...");
+    await typeLine("Ultra Mega Awesome Dopeness.");
+    await typeLine("You determine your destiny...");
+    await typeLine("but destiny demands a choice");
 
-    await typeLine("But destiny demands a choice...");
-
-    // interactive choice
-    const choice = await getInput(
-        "1 — Seek Chaos & Adventure\n2 — Claim Wealth & Glory\n3 — Unlock Inner Cosmic Power"
-    );
+    const choice = await getChoice();
 
     await typeLine("Processing choice...");
 
@@ -174,13 +287,12 @@ async function start() {
     await typeLine("Core Directive:");
     await typeLine("Main Character Energy.");
 
-    // keep final sentence up
     screen.innerHTML = "HAPPY 22ND BIRTHDAY GABY.";
-
     launchConfetti();
 }
 
-/* CONFETTI */
+/* -------- CONFETTI -------- */
+
 const confettiCanvas = document.getElementById("confetti");
 const ctx = confettiCanvas.getContext("2d");
 confettiCanvas.width = window.innerWidth;
@@ -212,8 +324,10 @@ function animateConfetti() {
     requestAnimationFrame(animateConfetti);
 }
 
-start();
-</script>
+/* -------- START -------- */
 
+initTransmission();
+
+</script>
 </body>
 </html>
