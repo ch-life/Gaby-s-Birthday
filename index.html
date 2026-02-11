@@ -279,7 +279,7 @@ function getInput(promptText) {
 
 async function initTransmission() {
     await typeLine("Receiving transmission...", 100, 1500);
-    await typeLine("Do you accept this transmission?", 100, 1500);
+    await typeLine("Accept transmission?", 100, 1500);
 
     const button = document.createElement("button");
     button.id = "confirmBtn";
