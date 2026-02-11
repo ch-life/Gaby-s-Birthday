@@ -122,10 +122,31 @@ canvas#confetti {
     transform: scale(1.05);
 }
 
+#muteBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 18px;
+    font-size: 20px;
+    font-family: 'Bungee Spice', cursive;
+    background: transparent;
+    border: 2px solid #00f7ff;
+    color: #00f7ff;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+#muteBtn:hover {
+    background: #00f7ff;
+    color: black;
+}
+
 </style>
 </head>
 <body>
 
+<button id="muteBtn">🔊</button>
 <div id="flashOverlay"></div>
 <canvas id="confetti"></canvas>
 <div id="screen"></div>
@@ -139,6 +160,31 @@ canvas#confetti {
 </audio>
 
 <script>
+const gabyNames = [
+    "GABY",
+    "GABSTER",
+    "GABRIELLA THE SUPREME",
+    "COSMIC QUEEN G",
+    "GABSIE",
+    "GABERONI",
+    "GABERALLI",
+    "GABEROO",
+    "GABERS",
+    "GIBI",
+    "GIBY GABS",
+    "RELA",
+    "GOOBS",
+    "GUH-BRELA",
+    "HOMIE G",
+    "GABS THE GREAT",
+    "GABS MCGEE",
+    "BIG G",
+    "GERBS",
+    "GERBER",
+    "G-G-G-GAAAAAAABY",
+    "DJ GABY WITH A G"
+];
+
 const screen = document.getElementById("screen");
 const flash = document.getElementById("flashOverlay");
 const music = document.getElementById("bgMusic");
@@ -147,6 +193,34 @@ const typeSound = document.getElementById("typeSound");
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+const muteBtn = document.getElementById("muteBtn");
+let isMuted = false;
+
+muteBtn.addEventListener("click", () => {
+    isMuted = !isMuted;
+
+    music.muted = isMuted;
+    typeSound.muted = isMuted;
+
+    muteBtn.innerText = isMuted ? "🔇" : "🔊";
+});
+
+let birthdayInterval = null;
+
+function startBirthdayLoop() {
+    let index = 0;
+
+    function updateName() {
+        screen.innerHTML = `HAPPY 22ND BIRTHDAY ${gabyNames[index]}.`;
+        index = (index + 1) % gabyNames.length;
+    }
+
+    updateName();
+
+    birthdayInterval = setInterval(updateName, 4000);
+}
+
 
 async function typeLine(text, speed = 90, hold = 2000) {
     screen.innerHTML = "";
@@ -269,11 +343,20 @@ async function startAdventure() {
     await typeLine("Processing choice...");
 
     if (choice === "1") {
-        await typeLine("Spontaneity unlocked.");
-        await typeLine("Legendary memories pending.");
-        await typeLine("Unexpected plot twists incoming.");
+        await typeLine("You've Chosen to Seek Chaos & Adventure.");
+        await typeLine("Good choice.");
+        await typeLine("New achievement unlocked!");
+        await typeLine("Badass Girl Boss in her Empire Era");
+        await typeLine("You've taken control of the narrative");
+        await typeLine("You own the future.");
+        await typeLine("You start the trends.");
+        await typeLine("You make the world what you want it to be.");
     }
     else if (choice === "2") {
+        await typeLine("You've Chosen Claim Wealth & Glory.");
+        await typeLine("Glamorous choice.");
+        await typeLine("New attribute unlocked...");
+        await typeLine("Badass Boss Bitch");
         await typeLine("Opportunities accelerating.");
         await typeLine("Rooms shift when you enter.");
         await typeLine("Momentum building.");
@@ -287,8 +370,11 @@ async function startAdventure() {
     await typeLine("Core Directive:");
     await typeLine("Main Character Energy.");
 
-    screen.innerHTML = "HAPPY 22ND BIRTHDAY GABY.";
+    await typeLine("HAPPY 22ND BIRTHDAY...", 120, 1000);
+
     launchConfetti();
+    startBirthdayLoop();
+    addRestartButton();
 }
 
 /* -------- CONFETTI -------- */
@@ -327,6 +413,35 @@ function animateConfetti() {
 /* -------- START -------- */
 
 initTransmission();
+
+/* -------- Optional Start Over -------- */
+function addRestartButton() {
+    const restartBtn = document.createElement("button");
+    restartBtn.id = "confirmBtn";
+    restartBtn.innerText = "START OVER";
+
+    restartBtn.addEventListener("click", () => {
+
+        // Stop birthday name loop
+        if (birthdayInterval) {
+            clearInterval(birthdayInterval);
+            birthdayInterval = null;
+        }
+
+        // Reset confetti
+        pieces = [];
+        ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+
+        // Reset music
+        music.currentTime = 0;
+
+        screen.innerHTML = "";
+
+        initTransmission(); // full reset to beginning
+    });
+
+    screen.appendChild(restartBtn);
+}
 
 </script>
 </body>
