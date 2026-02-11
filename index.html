@@ -142,22 +142,6 @@ canvas#confetti {
     color: black;
 }
 
-.glowName {
-    font-size: 48px;
-    text-shadow:
-        0 0 10px #00f7ff,
-        0 0 20px #ff00ff,
-        0 0 40px #00f7ff;
-
-    animation: glowPulse 2.5s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-    0% { text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; }
-    50% { text-shadow: 0 0 20px #00f7ff, 0 0 40px #00f7ff, 0 0 60px #00f7ff; }
-    100% { text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; }
-}
-
     
 </style>
 </head>
@@ -184,7 +168,7 @@ const gabyNames = [
     "COSMIC QUEEN G",
     "GABSIE",
     "GABERONI",
-    "GABERALLI",
+    "GABERELLI",
     "GABEROO",
     "GABERS",
     "GIBI",
@@ -231,10 +215,9 @@ function startBirthdayLoop() {
 
     const line1 = document.createElement("div");
     const line2 = document.createElement("div");
-    line2.classList.add("glowName");
     const buttonContainer = document.createElement("div");
 
-    line1.innerText = "HAPPY 22ND BIRTHDAY";
+    line1.innerText = "HAPPY BIRTHDAY";
     line1.style.marginBottom = "20px";
 
     line2.style.minHeight = "60px"; // prevents layout shift
@@ -351,12 +334,13 @@ function getChoice() {
 
 async function startAdventure() {
 
-    await typeLine("Initializing Cosmic Intelligence...");
-    await typeLine("Scanning quantum signature...");
+    await typeLine("Initializing...");
+    await typeLine("Scanning signature...");
     await typeLine("Identity confirmed.");
     await typeLine("Gaby.");
-    await typeLine("Upgrade detected.");
-    await typeLine("Birthday version: 22.");
+    await typeLine("Update detected.");
+    await typeLine("Update type: Birthday");
+    await typeLine("Birthday version 22.0");
 
     screen.innerHTML = "SYSTEM OVERRIDE";
     screen.classList.add("flashText");
@@ -364,19 +348,18 @@ async function startAdventure() {
     screen.classList.remove("flashText");
     screen.innerHTML = "";
 
-    await typeLine("Analyzing destiny matrix...");
-    await typeLine("Probability streams merging...");
+    await typeLine("Analyzing...");
 
-    screen.innerHTML = "The Universe trembles...";
+    screen.innerHTML = "Ultimate upgrade incoming...";
     screen.classList.add("shake");
     await sleep(3000);
     screen.classList.remove("shake");
     screen.innerHTML = "";
 
-    await typeLine("Your birthday has been upgraded...");
-    await typeLine("Ultra Mega Awesome Dopeness.");
-    await typeLine("You determine your destiny...");
-    await typeLine("but destiny demands a choice");
+    await typeLine("CONGRATULATIONS!");
+    await typeLine("Your birthday has been AWARDED GOLD TIER!");
+    await typeLine("You now determine your destiny");
+    await typeLine("but destiny demands a choice...");
 
     const choice = await getChoice();
 
@@ -385,30 +368,37 @@ async function startAdventure() {
     if (choice === "1") {
         await typeLine("You've Chosen to Seek Chaos & Adventure.");
         await typeLine("Good choice.");
-        await typeLine("New achievement unlocked!");
-        await typeLine("Badass Girl Boss in her Empire Era");
-        await typeLine("You've taken control of the narrative");
-        await typeLine("You own the future.");
-        await typeLine("You start the trends.");
-        await typeLine("You make the world what you want it to be.");
+        await typeLine("New Trait Unlocked!");
+        await typeLine("Trait: spontaneity");
+        await typeLine("Adventures await at your doorstep");
+        await typeLine("You're the embodiment of excitement.");
+        await typeLine("You let the winds take you to far off lands ...");
+        await typeLine("where you will experience true bliss");
     }
     else if (choice === "2") {
         await typeLine("You've Chosen Claim Wealth & Glory.");
         await typeLine("Glamorous choice.");
-        await typeLine("New attribute unlocked...");
-        await typeLine("Badass Boss Bitch");
-        await typeLine("Opportunities accelerating.");
+        await typeLine("New achievement unlocked:");
+        await typeLine("Badass Girl Boss in her Empire Era");
         await typeLine("Rooms shift when you enter.");
-        await typeLine("Momentum building.");
+        await typeLine("You control the narrative");;
+        await typeLine("You start the trends.");
+        await typeLine("You own the future.")
     }
     else {
-        await typeLine("Intuition enhanced.");
-        await typeLine("Confidence stabilizing.");
-        await typeLine("Magnetic presence activated.");
+        await typeLine("You've Chosen to Unlock Inner Cosmic Power");
+        await typeLine("That choice is perfectly you.");
+        await typeLine("You are the master of destiny");
+        await typeLine("Everyday is hand crafted just for you");
+        await typeLine("Challenges may come ...");
+        await typeLine("But you will have the Cosmos to back you up");
+        await typeLine("BONUS FEATURE:");
+        await typeLine("A side character named Chance has volunteered to help you out on your journey!");
+        await typeLine("That's the greatest reward of all lols");
     }
 
-    await typeLine("Core Directive:");
-    await typeLine("Main Character Energy.");
+    await typeLine("YOUR NEW ROLE:");
+    await typeLine("Main Character");
 
     launchConfetti();
     startBirthdayLoop();
